@@ -58,14 +58,14 @@ jobs:
         with:
             path: "./ChronoForge"
             
-      - name: Tag branch
-        shell: pwsh
-        env:
-          VERSION: "this-tagged"
+      - name: Create tag
+        uses: actions/github-script@v5
         working-directory: "./ChronoForge"
-        run: |
-          $tagName = "builds/$env:VERSION"
-          echo "Tagging build as $tagName"
-          git tag -f -a $tagName -m "Release $env:VERSION."
-          echo "Pushing tag $tagName to origin"
-          git push -f origin $tagName
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/build/this-tagged',
+              sha: context.sha
+            })

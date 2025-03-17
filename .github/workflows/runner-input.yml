@@ -1,0 +1,22 @@
+name: Runner Input testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner-type:
+        type: choice
+        description: Runner
+        options:
+        - ubuntu-latest
+        - windows-latest
+
+jobs:
+  run-things:
+    runs-on: ${{ inputs.runner-type }}
+    steps:
+      - name: Print the running ref to STDOUT
+        run: echo  The Ref is ${{ github.ref }}
+      - name: Print the running ref name to STDOUT
+        run: echo  The Ref Name is ${{ github.ref_name }}
+      - name: Print the running ref type to STDOUT
+        run: echo  The Ref Type is ${{ github.ref_type }}

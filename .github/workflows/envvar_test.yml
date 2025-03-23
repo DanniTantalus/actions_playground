@@ -23,16 +23,23 @@ jobs:
       - name: Append Git info to Env
         shell: pwsh
         run: |
-          $branch = git branch --show-current
-          $commit = git rev-parse --short ${{ github.sha }}
-          echo "GIT_BRANCH = $branch" >> "$GITHUB_ENV"
-          echo "GIT_COMMIT = $commit" >> "$GITHUB_ENV"
+          git branch --show-current
+          git rev-parse --short ${{ github.sha }}
+        
+      - name: Append Git info to Env
+        shell: pwsh
+        run: |
+          git branch --show-current
+          $branch = (git branch --show-current)
+          $commit = (git rev-parse --short ${{ github.sha }})
+
+          Write-Host "->" $branch $commit "<-"
+          
+          echo "PROJ_GIT_BRANCH= $branch" >> "$GITHUB_ENV"
+          echo "PROJ_GIT_COMMIT= $commit" >> "$GITHUB_ENV"
 
       - name: Use new Env
         shell: pwsh
-        env:
-          GitBranch: ${{ env.GIT_BRANCH }}
-          GitCommit: ${{ env.GIT_COMMIT }}
         run: |
-          Write-Host "Git Branch:" $env:GitBranch
-          Write-Host "Git Commit:" $env:GitCommit
+          Write-Host "Git Branch:" $env:PROJ_GIT_BRANCH
+          Write-Host "Git Commit:" $env:PROJ_GIT_COMMIT

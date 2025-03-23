@@ -24,7 +24,7 @@ jobs:
         shell: pwsh
         run: |
           echo "GIT_BRANCH = $(git branch --show-current)" >> "$GITHUB_ENV"
-          echo "GIT_COMMIT = $(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_ENV"
+          echo "GIT_COMMIT=$(git rev-parse --short ${{ github.sha }})" >> "$GITHUB_ENV"
 
       - name: Use new Env
         shell: pwsh

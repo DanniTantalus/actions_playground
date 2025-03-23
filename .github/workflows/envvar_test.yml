@@ -35,8 +35,5 @@ jobs:
       - name: Use new Env
         shell: pwsh
         run: |
-          Write-Host "Git Branch:" $env:GitBranch
-          Write-Host "Git Commit:" $env:GitCommit
-          
-          Write-Host "Git Branch:" $env:GITBRANCH
-          Write-Host "Git Commit:" $env:GITCOMMIT
+          Write-Host "Git Branch: $env:GitBranch"
+          Write-Host "Git Commit: $env:GitCommit"

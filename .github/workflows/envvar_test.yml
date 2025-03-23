@@ -1,0 +1,33 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Env test
+
+# Controls when the workflow will run
+on:
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+
+      - name: Append Git info to Env
+        shell: pwsh
+        run: |
+          echo "GitBranch = git branch --show-current" >> "$GITHUB_ENV"
+          echo "GitCommit = git rev-parse --short ${{ github.sha }}" >> "$GITHUB_ENV"
+
+      - name: Use new Env
+        shell: pwsh
+        env:
+          GitBranch: ${{ env.GitBranch }}
+          GitCommit: ${{ env.GitCommit }}
+        run: |
+          Write-Host "Git Branch:" $env:GitBranch
+          Write-Host "Git Commit:" $env:GitCommit

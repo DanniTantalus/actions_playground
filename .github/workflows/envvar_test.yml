@@ -29,9 +29,9 @@ jobs:
       - name: Append Git info to Env
         shell: pwsh
         run: |
-          echo "GitBranch = $(git branch --show-current)" >> $env:GITHUB_ENV
-          echo "GitCommit = $(git rev-parse --short ${{ github.sha }})" >> $env:GITHUB_ENV
-          echo "ALLCAPS = $(git rev-parse --short ${{ github.sha }})" >> $env:GITHUB_ENV
+          echo "GitBranch=$(git branch --show-current)" >> $env:GITHUB_ENV
+          echo "GitCommit=$(git rev-parse --short ${{ github.sha }})" >> $env:GITHUB_ENV
+          echo "ALLCAPS=$(git rev-parse --short ${{ github.sha }})" >> $env:GITHUB_ENV
 
       - name: Use new Env
         shell: pwsh

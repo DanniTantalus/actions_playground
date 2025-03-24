@@ -31,9 +31,11 @@ jobs:
         run: |
           echo "GitBranch = $(git branch --show-current)" >> $env:GITHUB_ENV
           echo "GitCommit = $(git rev-parse --short ${{ github.sha }})" >> $env:GITHUB_ENV
+          echo "ALLCAPS = $(git rev-parse --short ${{ github.sha }})" >> $env:GITHUB_ENV
 
       - name: Use new Env
         shell: pwsh
         run: |
-          Write-Host "Git Branch: $env:GitBranch"
-          Write-Host "Git Commit: $env:GitCommit"
+          Write-Host "Git Branch: $env:GITBRANCH"
+          Write-Host "Git Commit: $env:GITCOMMIT"
+          Write-Host "ALLCAPS: $env:ALLCAPS"

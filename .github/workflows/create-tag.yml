@@ -6,6 +6,10 @@ on:
 jobs:
   run-things:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
+      repository-projects: write
     steps:
       - name: Tag run
         uses: actions/github-script@v7.0.1

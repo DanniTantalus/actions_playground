@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      runnerName: ${{ steps.find-instance.outputs.runnerName || 'self-hosted' }}
+      runnerName: ${{ steps.find-instance.outputs.runnerName }}
 
     steps:
     - name: Find an instance
@@ -44,5 +44,5 @@ jobs:
     - name: Run a thing
       shell: pwsh
       run: |
-        $runnerName = ${{ needs.find-runner.outputs.runnerName || inputs.runner-group || 'fall back' }}
+        $runnerName = "${{ needs.find-runner.outputs.runnerName || inputs.runner-group || 'fall back' }}"
         echo "I would have run on $runnerName"

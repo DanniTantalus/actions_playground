@@ -22,11 +22,11 @@ jobs:
 
     steps:
     - name: Find an instance
-      if: ${{ inputs.runner-group }} == 'Virtual'
+      if: ${{ inputs.runner-group == 'Virtual' }}
       id: find-instance
       shell: pwsh
       run: |
-        $runnerName = "self-hosted" # Just use any self-hosted runner available now
+        $runnerName = "vm-runner-name"
 
         # Actually look for one, and start it up
 
@@ -45,4 +45,4 @@ jobs:
       shell: pwsh
       run: |
         $runnerName = ${{ needs.find-runner.outputs.runnerName || inputs.runner-group || 'fall back' }}
-        echo "I would have run on $runnerName
+        echo "I would have run on $runnerName"

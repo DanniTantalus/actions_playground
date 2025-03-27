@@ -15,14 +15,14 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   find-runner:
-    if: ${{ inputs.runner-group }} == 'Virtual'
     runs-on: ubuntu-latest
 
     outputs:
-      runnerName: ${{ steps.find-instance.outputs.runnerName }}
+      runnerName: ${{ steps.find-instance.outputs.runnerName || 'self-hosted' }}
 
     steps:
     - name: Find an instance
+      if: ${{ inputs.runner-group }} == 'Virtual'
       id: find-instance
       shell: pwsh
       run: |
@@ -34,13 +34,14 @@ jobs:
         
   # This workflow contains a single job called "build"
   build:
+    needs: [find-runner]
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - name: Run a one-line script
+    - name: Run a thing
       shell: pwsh
       run: |
         $runnerName = ${{ needs.find-runner.outputs.runnerName || inputs.runner-group || 'fall back' }}

@@ -25,5 +25,5 @@ jobs:
         run: |
           Write-Host "./Script.ps1 `
           -Param1 $thing `
-          ${{ inputs.run-switch && '-DoSwitch' }} `
+          ${{ inputs.run-switch && '-DoSwitch' || ''}} `
           "

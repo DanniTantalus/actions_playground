@@ -9,6 +9,17 @@ on:
   workflow_dispatch:
 
 jobs:
+  print-info:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Info
+        shell: pwsh
+        run: |
+          echo "github.event_name = ${{ github.event_name }}" 
+          echo "github.ref_type = ${{ github.ref_type }}" 
+          echo "github.ref_name = ${{ github.ref_name }}" 
+          echo "if test = ${{  (github.event_name == 'workflow_call') || (github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/')) }}" 
+
   collect-info:
     if: ${{ (github.event_name == 'workflow_call') || (github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/')) }}
 

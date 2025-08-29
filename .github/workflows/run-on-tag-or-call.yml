@@ -16,12 +16,13 @@ jobs:
         shell: pwsh
         run: |
           echo "github.event_name = ${{ github.event_name }}" 
+          echo "inputs.build-version = ${{ inputs.build-version }}" 
           echo "github.ref_type = ${{ github.ref_type }}" 
           echo "github.ref_name = ${{ github.ref_name }}" 
           echo "if test = ${{  (github.event_name == 'workflow_call') || (github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/')) }}" 
 
   collect-info:
-    if: ${{ (github.event_name == 'workflow_call') || (github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/')) }}
+    if: ${{ (inputs.build-version != '') || (github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/')) }}
 
     runs-on: ubuntu-latest
 
@@ -42,12 +43,12 @@ jobs:
           echo "buildVersion=$buildVersion" >> $env:GITHUB_OUTPUT
 
       - name: Extract Build Version from Call
-        if: github.event_name == 'workflow_call'
+        if: ${{ inputs.build-version != '' }}
         id: extractVersion
         shell: pwsh
         run: |
           $buildVersion = "${{ inputs.build-version }}"
-          $buildPrefix = "$buildVersion-${{ inputs.build-config }}"
+          $buildPrefix = "$buildVersion-SomeSuffix"
           echo "buildPrefix=$buildPrefix" >> $env:GITHUB_OUTPUT
           echo "buildVersion=$buildVersion" >> $env:GITHUB_OUTPUT
 

@@ -1,0 +1,15 @@
+name: Call Only Run on Tag or Called
+on:
+  workflow_dispatch:
+    inputs: 
+      build-version:
+        type: string
+        description: Build Version
+
+jobs:
+
+  call_workflow:
+    uses: ./.github/workflows/run-on-tag-or-call.yml
+    with: 
+      build-version: "${{ inputs.build-version }}"
+    secrets: inherit

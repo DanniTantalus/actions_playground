@@ -1,0 +1,51 @@
+name: Only Run on Tag or Called
+
+on:
+  workflow_call:
+    inputs:        
+      build-version:
+        type: string
+
+  workflow_dispatch:
+
+jobs:
+  collect-info:
+    if: ${{ (github.event_name == 'workflow_call') || (github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/')) }}
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      buildPrefix: ${{ steps.parseVersion.outputs.buildPrefix || steps.extractVersion.outputs.buildPrefix }}
+      buildVersion: ${{ steps.parseVersion.outputs.buildVersion ||  steps.extractVersion.outputs.buildVersion }}
+
+    steps:
+      - name: Determine Build Version
+        if: ${{ github.ref_type == 'tag' && startsWith(github.ref_name, 'builds/') }}
+        id: parseVersion
+        shell: pwsh
+        run: |
+          $tagName = "${{ github.ref_name }}"
+          $buildVersion = $tagName -replace "builds/"
+          $buildPrefix = "$buildVersion-${{ inputs.build-config }}"
+          echo "buildPrefix=$buildPrefix" >> $env:GITHUB_OUTPUT
+          echo "buildVersion=$buildVersion" >> $env:GITHUB_OUTPUT
+
+      - name: Extract Build Version from Call
+        if: github.event_name == 'workflow_call'
+        id: extractVersion
+        shell: pwsh
+        run: |
+          $buildVersion = "${{ inputs.build-version }}"
+          $buildPrefix = "$buildVersion-${{ inputs.build-config }}"
+          echo "buildPrefix=$buildPrefix" >> $env:GITHUB_OUTPUT
+          echo "buildVersion=$buildVersion" >> $env:GITHUB_OUTPUT
+
+  echo-info:
+    needs: [ collect-info ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo Build Version
+        shell: pwsh
+        run: |
+          echo "buildPrefix = ${{ needs.collect-info.outputs.buildPrefix }}" 
+          echo "buildVersion = ${{ needs.collect-info.outputs.buildVersion }}" 
